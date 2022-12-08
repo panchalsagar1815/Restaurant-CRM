@@ -1,0 +1,94 @@
+{% extends 'Master.html' %}
+
+{% block title%} Orders {%endblock%}
+
+{% block link %}
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://unpkg.com/gijgo@1.9.13/js/gijgo.min.js" type="text/javascript"></script>
+    <link href="https://unpkg.com/gijgo@1.9.13/css/gijgo.min.css" rel="stylesheet" type="text/css" />
+{% endblock%}
+
+{%block body%}
+
+ <div class="container-fluid">
+
+          <!-- Page Heading -->
+          <!-- <h1 class="h3 mb-4 text-gray-800">Blank Page</h1> -->
+          <div class="card shadow mb-4">
+            <div class="card-header py-3">
+              <h6 class="m-0 font-weight-bold text-primary">Add Orders </h6>
+            </div>
+            <div class="card-body">
+              <form action="/addOrder/" method="POST">{% csrf_token %}
+                <table class="table">
+                  <tr><td><label for="customer_name_order">Customer Name</label></td>
+                    <td><input type="text" class="form-control" id="customer_name_order" name="customer_name_order" placeholder="Enter Customer Full Name" required></td></tr>
+                    <tr><td><label for="customer_phone"> Phone NO.</label></td>
+                    <td><select id="customer_phone" name="customer_phone" class="form-control">
+                        <option selected disabled>Select Phone NO</option>
+                        {% for i in customer %}
+                            <option value="{{ i.id }}">{{ i.customer_phone }}</option>
+                        {% endfor %}
+                    </select></td></tr>
+                  <tr><td><label for="dish_name">Dish name</label></td>
+                    <td><select id="dish_name" class="form-control" name="dish_name">
+                        <option selected disabled>Choose Dish</option>
+                        {% for i in menu %}
+                        <option value="{{i.id}}">{{i.dish_name}}</option>
+                        {% endfor %}
+<!--                        <option>Masala Dosa</option>-->
+                    </select></td></tr>
+                  <tr><td><label for="order_quantity">Quantity</label></td>
+                    <td><input type="number" class="form-control" id="order_quantity" name="order_quantity" placeholder="Enter Quantity" required></td></tr>
+                  <tr><td><label for="order_price">Total Price</label></td>
+                    <td><input type="number" class="form-control" id="order_price" name="order_price" placeholder="Enter Total Price" required></td></tr>
+                    <tr><td><label>Order Date</label></td>
+                    <td><input type="date" id="order_date" class="form-control" placeholder="YYYY-MM-DD" name="order_date" /><script>
+        $('#datepicker').datepicker({
+            dateFormat: 'yy/mm/dd',
+            uiLibrary: 'bootstrap4'
+        });
+    </script></td></tr>
+                  <tr><td colspan="2" align="Center" ><input type="submit" name="" class="btn btn-primary" width=50%></td></tr>
+                </table>
+               <!--  <div class="form-group">
+
+
+                </div>
+                <div class="form-group">
+
+
+                </div>
+                <div class="form-group">
+
+
+                </div>
+                <div class="form-group">
+
+
+                </div>
+                <div class="form-group">
+
+
+                </div>
+                <div class="form-group">
+
+
+                </div>
+                <div class="form-group">
+
+
+                </div>
+                <div class="form-group"> -->
+
+                  <!-- <label for="exampleFormControlTextarea1">Example textarea</label>
+                  <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea> -->
+               <!--  </div> -->
+          </form>
+
+            </div>
+          </div>
+        </div>
+
+{%endblock%}

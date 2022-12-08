@@ -1,0 +1,422 @@
+{% extends 'Master.html'%}
+
+{% block title %} Dashboard {% endblock %}
+
+{%block body%}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+        <!-- Begin Page Content -->
+        <div class="container-fluid">
+
+          <!-- Page Heading -->
+          <div class="d-sm-flex align-items-center justify-content-between mb-4">
+            <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
+            <!-- <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fas fa-download fa-sm text-white-50"></i> Generate Report</a> -->
+          </div>
+
+          <!-- Content Row -->
+          <div class="row">
+
+            <!-- Total Customers Card Example -->
+            <div class="col-xl-3 col-md-6 mb-4">
+              <div class="card border-left-primary shadow h-100 py-2">
+                <div class="card-body">
+                  <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                      <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Total Customers</div>
+                      <div class="h5 mb-0 font-weight-bold text-gray-800">{{ total_customers }}</div>
+                    </div>
+                    <div class="col-auto">
+                      <i class="fas fa-user fa-2x text-gray-300"></i>
+                      <!-- <i class="fas fa-calendar fa-2x text-gray-300"></i> -->
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Earnings (Monthly) Card Example -->
+            <div class="col-xl-3 col-md-6 mb-4">
+              <div class="card border-left-success shadow h-100 py-2">
+                <div class="card-body">
+                  <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                      <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Earnings (Monthly)</div>
+                      <div class="h5 mb-0 font-weight-bold text-gray-800">Rs. {{ earnings_monthly }}</div>
+                    </div>
+                    <div class="col-auto">
+                      <i class="fas fa-rupee-sign fa-2x text-gray-300"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Total Leads Example -->
+            <div class="col-xl-3 col-md-6 mb-4">
+              <div class="card border-left-info shadow h-100 py-2">
+                <div class="card-body">
+                  <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                      <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Total Leads</div>
+                      <!-- <div class="row no-gutters align-items-center">
+                        <div class="col-auto">
+                          <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">50%</div>
+                        </div>
+                        <div class="col">
+                          <div class="progress progress-sm mr-2">
+                            <div class="progress-bar bg-info" role="progressbar" style="width: 50%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+                          </div>
+                        </div>
+                      </div> -->
+                      <div class="h5 mb-0 font-weight-bold text-gray-800">{{ total_leads }}</div>
+                    </div>
+                    <div class="col-auto">
+                      <i class="fas fa-funnel-dollar fa-2x text-gray-300"></i>
+                      <!-- <i class="fas fa-clipboard-list fa-2x text-gray-300"></i> -->
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Orders (Monthly) -->
+            <div class="col-xl-3 col-md-6 mb-4">
+              <div class="card border-left-warning shadow h-100 py-2">
+                <div class="card-body">
+                  <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                      <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Orders (Monthly)</div>
+                      <div class="h5 mb-0 font-weight-bold text-gray-800">{{ total_orders }}+</div>
+                    </div>
+                    <div class="col-auto">
+                      <i class="fas fa-utensils fa-2x text-gray-300"></i>
+                      <!-- <i class="fas fa-comments fa-2x text-gray-300"></i> -->
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Content Row -->
+
+          <div class="row">
+
+            <!-- Area Chart -->
+            <div class="col-xl-7 col-lg-7">
+              <div class="card shadow mb-4">
+                <!-- Card Header - Dropdown -->
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                  <h6 class="m-0 font-weight-bold text-primary">Earnings Overview</h6>
+<!--                  <div class="dropdown no-arrow">-->
+<!--                    <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">-->
+<!--                      <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>-->
+<!--                    </a>-->
+<!--                    <div class="dropdown-menu dropdown-menu-right shadow animated&#45;&#45;fade-in" aria-labelledby="dropdownMenuLink">-->
+<!--                      <div class="dropdown-header">Dropdown Header:</div>-->
+<!--                      <a class="dropdown-item" href="#">Action</a>-->
+<!--                      <a class="dropdown-item" href="#">Another action</a>-->
+<!--                      <div class="dropdown-divider"></div>-->
+<!--                      <a class="dropdown-item" href="#">Something else here</a>-->
+<!--                    </div>-->
+<!--                  </div>-->
+                </div>
+                <!-- Card Body -->
+                <div class="card-body">
+                  <div class="chart-area">
+                    <canvas id="myChart"></canvas>
+                    <script>
+                          var ctx = document.getElementById('myChart').getContext('2d');
+                          var chart = new Chart(ctx, {
+                              // The type of chart we want to create
+                              type: 'line',
+
+                              // The data for our dataset
+                              data: {
+                                  labels: {{ all_months|safe }},
+                                  datasets: [{
+                                      label: 'Monthly Earnings',
+                                      backgroundColor: 'rgb(18, 156, 247)',
+                                      borderColor: 'rgb(255, 99, 132)',
+                                      data: {{ earnings_values|safe }}
+                                  }]
+                              },
+
+                                // Configuration options go here
+                                options: {}
+                            });
+
+            </script>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Pie Chart -->
+            <div class="col-xl-5 col-lg-7">
+              <div class="card shadow mb-4">
+                <!-- Card Header - Dropdown -->
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                  <h6 class="m-0 font-weight-bold text-primary">Dish wise Comparision</h6>
+<!--                  <div class="dropdown no-arrow">-->
+<!--                    <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">-->
+<!--                      <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>-->
+<!--                    </a>-->
+<!--                    <div class="dropdown-menu dropdown-menu-right shadow animated&#45;&#45;fade-in" aria-labelledby="dropdownMenuLink">-->
+<!--                      <div class="dropdown-header">Dropdown Header:</div>-->
+<!--                      <a class="dropdown-item" href="#">Action</a>-->
+<!--                      <a class="dropdown-item" href="#">Another action</a>-->
+<!--                      <div class="dropdown-divider"></div>-->
+<!--                      <a class="dropdown-item" href="#">Something else here</a>-->
+<!--                    </div>-->
+<!--                  </div>-->
+                </div>
+                <!-- Card Body -->
+                <div class="card-body">
+                  <div class="chart-pie pt-4 pb-2">
+                    <canvas id="myDoughnutChart"></canvas>
+                    <script>
+
+                     var ctx = document.getElementById('myDoughnutChart').getContext('2d');
+                          var chart = new Chart(ctx, {
+                              // The type of chart we want to create
+                              type: 'doughnut',
+
+                              // The data for our dataset
+                              data: {
+                                  labels: {{dish_wise_comparison_labels|safe }},
+                                  datasets: [{
+                                      label: 'Monthly Earnings',
+                                      backgroundColor: 'rgb(255, 99, 132)',
+                                      borderColor: 'rgb(255, 99, 132)',
+                                      data: {{ dish_wise_comparison_values|safe }},
+                                      backgroundColor: [
+                                        "#87CEFA",
+                                        "#87CEEB",
+                                        "#ADD8E6",
+                                        "#00BFFF",
+                                        "#1E90FF"]
+
+                                  }]
+                              },
+
+                                // Configuration options go here
+                                options: {}
+                            });
+                      </script>
+                  </div>
+<!--                  <div class="mt-4 text-center small">-->
+<!--                    <span class="mr-2">-->
+<!--                      <i class="fas fa-circle text-primary"></i> Direct-->
+<!--                    </span>-->
+<!--                    <span class="mr-2">-->
+<!--                      <i class="fas fa-circle text-success"></i> Social-->
+<!--                    </span>-->
+<!--                    <span class="mr-2">-->
+<!--                      <i class="fas fa-circle text-info"></i> Referral-->
+<!--                    </span>-->
+<!--                  </div>-->
+                </div>
+              </div>
+            </div>
+          </div>
+
+<!--            Second line-->
+            <div class="row">
+
+            <!-- Area Chart -->
+            <div class="col-xl-7 col-lg-7">
+              <div class="card shadow mb-4">
+                <!-- Card Header - Dropdown -->
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                  <h6 class="m-0 font-weight-bold text-primary">Leads Generation</h6>
+<!--                  <div class="dropdown no-arrow">-->
+<!--                    <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">-->
+<!--                      <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>-->
+<!--                    </a>-->
+<!--                    <div class="dropdown-menu dropdown-menu-right shadow animated&#45;&#45;fade-in" aria-labelledby="dropdownMenuLink">-->
+<!--                      <div class="dropdown-header">Dropdown Header:</div>-->
+<!--                      <a class="dropdown-item" href="#">Action</a>-->
+<!--                      <a class="dropdown-item" href="#">Another action</a>-->
+<!--                      <div class="dropdown-divider"></div>-->
+<!--                      <a class="dropdown-item" href="#">Something else here</a>-->
+<!--                    </div>-->
+<!--                  </div>-->
+                </div>
+                <!-- Card Body -->
+                <div class="card-body">
+                  <div class="chart-area">
+                    <canvas id="horizontalBar"></canvas>
+                    <script>
+                          var ctx = document.getElementById('horizontalBar').getContext('2d');
+                          var chart = new Chart(ctx, {
+                              // The type of chart we want to create
+                              type: 'bar',
+
+                              // The data for our dataset
+                              data: {
+                                  labels: {{ lead_source_labels|safe }},
+                                  datasets: [{
+                                      label: 'Total Leads',
+                                      backgroundColor: 'rgb(18, 156, 247)',
+                                      borderColor: 'rgb(255, 99, 132)',
+                                      data: {{ lead_source_count|safe }},
+
+                                  }]
+                              },
+
+                                // Configuration options go here
+                                options: {
+                                  scales: {
+                                    yAxes: [{
+                                      ticks: {
+                                        beginAtZero: true
+                                        }}]}}
+                            });
+
+            </script>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Pie Chart -->
+            <div class="col-xl-5 col-lg-5">
+              <div class="card shadow mb-4">
+                <!-- Card Header - Dropdown -->
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                  <h6 class="m-0 font-weight-bold text-primary">Dish wise Comparision</h6>
+<!--                  <div class="dropdown no-arrow">-->
+<!--                    <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">-->
+<!--                      <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>-->
+<!--                    </a>-->
+<!--                    <div class="dropdown-menu dropdown-menu-right shadow animated&#45;&#45;fade-in" aria-labelledby="dropdownMenuLink">-->
+<!--                      <div class="dropdown-header">Dropdown Header:</div>-->
+<!--                      <a class="dropdown-item" href="#">Action</a>-->
+<!--                      <a class="dropdown-item" href="#">Another action</a>-->
+<!--                      <div class="dropdown-divider"></div>-->
+<!--                      <a class="dropdown-item" href="#">Something else here</a>-->
+<!--                    </div>-->
+<!--                  </div>-->
+                </div>
+                <!-- Card Body -->
+                <div class="card-body">
+                  <div class="chart-pie pt-4 pb-2">
+                    <canvas id="pie"></canvas>
+                    <script>
+                          var ctx = document.getElementById('pie').getContext('2d');
+                          var chart = new Chart(ctx, {
+                              // The type of chart we want to create
+                              type: 'pie',
+
+                              // The data for our dataset
+                              data: {
+                                  labels: {{ customer_loc_labels|safe }},
+                                  datasets: [{
+                                      label: 'Monthly Earnings',
+                                      backgroundColor: [
+                                        "#87CEFA",
+                                        "#87CEEB",
+                                        "#ADD8E6",
+                                        "#00BFFF",
+                                        "#1E90FF"],
+                                      borderColor: 'rgb(255, 99, 132)',
+                                      data: {{ customer_loc_values|safe }}
+
+                                  }]
+                              },
+
+                                // Configuration options go here
+                                options: {}
+                            });
+
+            </script>
+                  </div>
+<!--                  <div class="mt-4 text-center small">-->
+<!--                    <span class="mr-2">-->
+<!--                      <i class="fas fa-circle text-primary"></i> Direct-->
+<!--                    </span>-->
+<!--                    <span class="mr-2">-->
+<!--                      <i class="fas fa-circle text-success"></i> Social-->
+<!--                    </span>-->
+<!--                    <span class="mr-2">-->
+<!--                      <i class="fas fa-circle text-info"></i> Referral-->
+<!--                    </span>-->
+<!--                  </div>-->
+                </div>
+              </div>
+            </div>
+          </div>
+
+<!--          Third Line-->
+
+          <div class="row">
+
+            <!-- Area Chart -->
+            <div class="col-xl-7 col-lg-7">
+              <div class="card shadow mb-4">
+                <!-- Card Header - Dropdown -->
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                  <h6 class="m-0 font-weight-bold text-primary">Customer Status Comparision</h6>
+<!--                  <div class="dropdown no-arrow">-->
+<!--                    <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">-->
+<!--                      <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>-->
+<!--                    </a>-->
+<!--                    <div class="dropdown-menu dropdown-menu-right shadow animated&#45;&#45;fade-in" aria-labelledby="dropdownMenuLink">-->
+<!--                      <div class="dropdown-header">Dropdown Header:</div>-->
+<!--                      <a class="dropdown-item" href="#">Action</a>-->
+<!--                      <a class="dropdown-item" href="#">Another action</a>-->
+<!--                      <div class="dropdown-divider"></div>-->
+<!--                      <a class="dropdown-item" href="#">Something else here</a>-->
+<!--                    </div>-->
+<!--                  </div>-->
+                </div>
+                <!-- Card Body -->
+                <div class="card-body">
+                  <div class="chart-area">
+                    <canvas id="Bar12"></canvas>
+                    <script>
+                          var ctx = document.getElementById('Bar12').getContext('2d');
+                          var chart = new Chart(ctx, {
+                              // The type of chart we want to create
+                              type: 'bar',
+
+                              // The data for our dataset
+                              data: {
+                                  labels: {{ status_labels|safe }},
+                                  datasets: [{
+                                      label: 'Status Comparision',
+                                      backgroundColor: 'rgb(18, 156, 247)',
+                                      borderColor: 'rgb(255, 99, 132)',
+                                      data: {{ status_values|safe }}
+                                  }]
+                              },
+
+                                // Configuration options go here
+                                options: {
+                                  scales: {
+                                    yAxes: [{
+                                      ticks: {
+                                        beginAtZero: true
+                                        }}]}}
+                            });
+
+            </script>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Pie Chart -->
+
+          </div>
+      <!-- End of Main Content -->
+
+{% endblock %}
+
+{% block script %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+ <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+{% endblock%}
