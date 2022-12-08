@@ -1,0 +1,87 @@
+{% extends 'Master.html' %}
+
+{% block title%} Menu {%endblock%}
+
+{% block link %}
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://unpkg.com/gijgo@1.9.13/js/gijgo.min.js" type="text/javascript"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+    <link href="https://unpkg.com/gijgo@1.9.13/css/gijgo.min.css" rel="stylesheet" type="text/css" />
+{% endblock%}
+
+{%block body%}
+     <script>
+$(document).ready(function(){
+    $('select option[value="{{menu_obj.dish_category}}"]').attr("selected",true);
+});
+</script>
+ <div class="container-fluid">
+          <!-- Page Heading -->
+          <!-- <h1 class="h3 mb-4 text-gray-800">Blank Page</h1> -->
+          <div class="card shadow mb-4">
+            <div class="card-header py-3">
+              <h6 class="m-0 font-weight-bold text-primary">Update Menu  </h6>
+            </div>
+            <div class="card-body">
+              <form action="{% url 'EditMenu' menu_obj.id %}" method="POST">{% csrf_token %}
+                <table class="table">
+                  <tr><td><label for="dish_name">Dish Name</label></td>
+                    <td><input type="text" value="{{ menu_obj.dish_name }}" class="form-control" id="dish_name" name="dish_name" required></td></tr>
+                  <tr><td><label >Dish Category</label></td>
+                    <td><select id="dish_category" class="form-control" name="dish_category">
+                     <option selected disabled>Select Category</option>
+                     <option value="Starter">Starter</option>
+                     <option value="Main Course">Main Course</option>
+                     <option value="Dessert">Dessert</option></select></td></tr>
+
+                  <tr><td><label for="dish_price">Dish Price</label></td>
+                    <td><input type="number" value="{{ menu_obj.dish_price }}" class="form-control" id="dish_price" name="dish_price" required></td></tr>
+                  <script>
+
+        $('#datepicker').datepicker({
+            uiLibrary: 'bootstrap4'
+        });
+    </script></td></tr>
+                  <tr><td colspan="2" align="Center" ><input type="submit" name="" class="btn btn-primary" width=50%></td></tr>
+                </table>
+               <!--  <div class="form-group">
+
+
+                </div>
+                <div class="form-group">
+
+
+                </div>
+                <div class="form-group">
+
+
+                </div>
+                <div class="form-group">
+
+
+                </div>
+                <div class="form-group">
+
+
+                </div>
+                <div class="form-group">
+
+
+                </div>
+                <div class="form-group">
+
+
+                </div>
+                <div class="form-group"> -->
+
+                  <!-- <label for="exampleFormControlTextarea1">Example textarea</label>
+                  <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea> -->
+               <!--  </div> -->
+          </form>
+
+            </div>
+          </div>
+        </div>
+
+{%endblock%}

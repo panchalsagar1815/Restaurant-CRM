@@ -1,0 +1,70 @@
+{% extends 'Master.html' %}
+
+{% block title%} Mail Box {%endblock%}
+
+
+
+{%block body%}
+
+ <div class="container-fluid">
+
+          <!-- Page Heading -->
+          <!-- <h1 class="h3 mb-4 text-gray-800">Blank Page</h1> -->
+          <div class="card shadow mb-4">
+            <div class="card-header py-3">
+              <h6 class="m-0 font-weight-bold text-primary">Compose Mail</h6>
+            </div>
+            <div class="card-body">
+              <form action="/composeMail/" method="POST">{% csrf_token %}
+                <table class="table">
+                  <tr><td><label >To </label></td>
+                      <td><input type="email" id="mail_id" name="mail_id" class="form-control" placeholder="name@example.com">
+                    </td></tr>
+                  <tr><td><label for="mail_subject">Subject</label></td>
+                    <td><input type="text" class="form-control" id="mail_subject" name="mail_subject" placeholder="Enter Subject" required></td></tr>
+                  <tr><td><label for="mail_body">Body</label></td>
+                    <td><textarea class="form-control" id="mail_body" rows="4" placeholder="Enter Message" name="mail_body" required></textarea></td></tr>
+                  <tr><td><label for="mail_attachment">Choose file</label></td>
+                      <td><input type="file" class="form-control" id="mail_attachment"></td></tr>
+                  <tr><td colspan="2" align="Center" ><input type="submit" name="" value="Send Mail" class="btn btn-primary" width=50%></td></tr>
+                </table>
+               <!--  <div class="form-group">
+
+
+                </div>
+                <div class="form-group">
+
+
+                </div>
+                <div class="form-group">
+
+
+                </div>
+                <div class="form-group">
+
+
+                </div>
+                <div class="form-group">
+
+
+                </div>
+                <div class="form-group">
+
+
+                </div>
+                <div class="form-group">
+
+
+                </div>
+                <div class="form-group"> -->
+
+                  <!-- <label for="exampleFormControlTextarea1">Example textarea</label>
+                  <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea> -->
+               <!--  </div> -->
+          </form>
+
+            </div>
+          </div>
+        </div>
+
+{%endblock%}
